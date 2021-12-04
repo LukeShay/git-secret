@@ -1,9 +1,11 @@
-FROM ubuntu:20.04
+FROM alpine:latest
+
+RUN apk add --update make git bash
+
+RUN git clone https://github.com/awslabs/git-secrets.git /git-secrets && \
+      cd /git-secrets && \
+      make install
 
 WORKDIR /data
-
-RUN sudo sh -c "echo 'deb https://gitsecret.jfrog.io/artifactory/git-secret-deb git-secret main' >> /etc/apt/sources.list" && \
-      wget -qO - 'https://gitsecret.jfrog.io/artifactory/api/gpg/key/public' | sudo apt-key add - && \
-      sudo apt-get update && sudo apt-get install -y git-secret
       
-ENTRYPOINT ["git", "secret"]
+ENTRYPOINT ["git", "secrets"]
